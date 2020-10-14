@@ -9,7 +9,7 @@
  SELECT MIN(subscription_start), MAX(subscription_start)
  FROM subscriptions;
 
---3. Creating a temporary table of months
+--3. Creating a temporary table, months
 
 WITH months AS
 (SELECT
@@ -27,31 +27,31 @@ SELECT
 SELECT *
 FROM months;
 
---4. Creating a temporary table, cross_join, from subscriptions and months.
+--4.Â CreatingÂ aÂ temporaryÂ table,Â cross_join,Â fromÂ subscriptionsÂ andÂ months.
 
-WITH months AS
+WITHÂ monthsÂ AS
 (SELECT
-  '2017-01-01' as first_day,
-  '2017-01-31' as last_day
+Â Â '2017-01-01'Â asÂ first_day,
+Â Â '2017-01-31'Â asÂ last_day
 UNION
 SELECT
-  '2017-02-01' as first_day,
-  '2017-02-28' as last_day
+Â Â '2017-02-01'Â asÂ first_day,
+Â Â '2017-02-28'Â asÂ last_day
 UNION
 SELECT
-  '2017-03-01' as first_day,
-  '2017-03-31' as last_day
-  ),
-cross_join AS
-(SELECT subscriptions.* , months.*
-FROM subscriptions
-CROSS JOIN months)
+Â Â '2017-03-01'Â asÂ first_day,
+Â Â '2017-03-31'Â asÂ last_day
+Â Â ),
+cross_joinÂ AS
+(SELECTÂ subscriptions.*Â ,Â months.*
+FROMÂ subscriptions
+CROSSÂ JOINÂ months)
 
-SELECT *
-FROM cross_join
-LIMIT 9; 
+SELECTÂ *
+FROMÂ cross_join
+LIMITÂ 9;Â 
 
---5. Creating a temporary table, 
+--5. Creating a temporary table, status, from cross_join.
 
 WITH months AS
 (SELECT
@@ -100,7 +100,7 @@ status AS
   FROM status
   LIMIT 9;
 
---6.
+--6. Adding an is_canceled_87 and an is_canceled_30 column to the status temporary table.
  
 WITH months AS
 (SELECT
@@ -163,7 +163,7 @@ SELECT *
 FROM status
 LIMIT 9;
 
---7. 
+--7. Creating a temporary table, status_aggregate.
 
 WITH months AS
 (SELECT
@@ -234,7 +234,7 @@ GROUP BY month)
 SELECT *
 FROM status_aggregate;
 
---8. Calculating the churn rate
+--8. Calculating the churn rate.
 
 WITH months AS
 (SELECT
@@ -306,7 +306,7 @@ SELECT ROUND(1.0*SUM(sum_is_canceled_87)/SUM(sum_is_active_87),4) AS churn_rate_
   ROUND(1.0*SUM(sum_is_canceled_30)/SUM(sum_is_active_30),4) AS churn_rate_30
 FROM status_aggregate;
 
---9.
+--9. Modifying the code for the status and status_aggregate tables to support a large number of segments.
 
 WITH months AS
 (SELECT
